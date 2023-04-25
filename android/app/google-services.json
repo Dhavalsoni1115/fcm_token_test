@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "187799667455",
+    "project_id": "accurate-laboratory-bb681",
+    "storage_bucket": "accurate-laboratory-bb681.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:187799667455:android:d3abbb290ff426770282ca",
+        "android_client_info": {
+          "package_name": "com.tag97.accuratelaboratory"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "187799667455-5mdi6sh6opr56vult47dv129k7vmgmhd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDuSRvWVOHu5SxG2RxHQjzl5NXJHuejKUQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "187799667455-5mdi6sh6opr56vult47dv129k7vmgmhd.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
