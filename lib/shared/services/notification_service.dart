@@ -2,7 +2,9 @@ import 'dart:math';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:test_notification/shared/presentation/screens/appoitment_detail_screen.dart';
 
 class NotificationService {
   FirebaseMessaging messege = FirebaseMessaging.instance;
@@ -54,7 +56,7 @@ class NotificationService {
       initlizationSetting,
       // onSelectNotification: (payload) {
       //   handleMassage(context, message);
-        
+
       // },
     );
   }
@@ -72,14 +74,12 @@ class NotificationService {
     AndroidNotificationChannel channel = AndroidNotificationChannel(
       Random.secure().nextInt(1000).toString(),
       'Importents',
-      'Open Now',
       importance: Importance.max,
     );
     AndroidNotificationDetails androidNotificationDetails =
         AndroidNotificationDetails(
       channel.id,
       channel.name,
-      channel.description,
       importance: Importance.high,
       priority: Priority.high,
       ticker: 'ticker',
@@ -99,6 +99,13 @@ class NotificationService {
   void handleMassage(BuildContext context, RemoteMessage message) {
     if (message.data == 'msg') {
       //navigator.push
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) =>
+              AppoitmentDetailScreen(appoitmentId: 'DzeY6cYS8XZyWrommAZO'),
+        ),
+      );
     }
   }
 }

@@ -32,16 +32,15 @@ dependencies:
     sdk: flutter
   cupertino_icons: ^1.0.2
   animated_splash_screen:
-  google_maps_flutter:
+  google_maps_flutter: ^2.2.5
   url_launcher:
   map_launcher:
   firebase_database: ^10.1.1
   http: ^0.13.5
   loading_animation_widget:
   shared_preferences: ^2.0.17
-  flutter_local_notifications: 
+  flutter_local_notifications: ^13.0.0
   skeletons:
-  geolocator: ^4.0.3
   full_screen_image_null_safe: ^2.0.0
 
   # The following adds the Cupertino Icons font to your application.
@@ -50,6 +49,9 @@ dependencies:
   firebase_core: ^2.10.0
   firebase_auth: ^4.4.2
   cloud_firestore: ^4.5.2
+  app_settings: ^4.2.0
+  geolocator: ^9.0.2
+  geocoding: ^2.1.0
 
 dev_dependencies:
   flutter_test:

@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:full_screen_image_null_safe/full_screen_image_null_safe.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:skeletons/skeletons.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../../constants.dart';
@@ -49,8 +50,6 @@ class _AppoitmentDetailScreenState extends State<AppoitmentDetailScreen> {
     var appoitment = Appoitment();
     dynamic appoitmentData =
         await appoitment.getAppoitment(widget.appoitmentId.toString());
-    print('000000000000000000');
-    print(appoitmentData['geoLocation']);
     setState(() {
       selectedAppoitmentData = appoitmentData;
     });
@@ -77,21 +76,48 @@ class _AppoitmentDetailScreenState extends State<AppoitmentDetailScreen> {
     //  print(data);
   }
 
-  double? currentLattitude, currentLongitude;
-  getCurrentLocarion() async {
-    var location = CurrentLocation();
-    await location.getCurrentLocation();
+  lounchMap() {
+    mapLauncher.MapLauncher.showDirections(
+      mapType: mapLauncher.MapType.google,
+      origin: mapLauncher.Coords(
+        _currentPosition!.latitude,
+        _currentPosition!.longitude,
+      ),
+      originTitle: 'Your Locations',
+      directionsMode: mapLauncher.DirectionsMode.driving,
+      destinationTitle: 'Destination Location',
+      destination: mapLauncher.Coords(
+        selectedAppoitmentData['geoLocation']['lat'].toDouble(),
+        selectedAppoitmentData['geoLocation']['long'].toDouble(),
+      ),
+    );
+  }
 
-    setState(() {
-      currentLattitude = location.latitude;
-      currentLongitude = location.longitude;
+  Position? _currentPosition;
+  var hasPermission;
+  Future<void> getCurrentLocarion() async {
+    var location = Location();
+    hasPermission = await location.handleLocationPermission(context: context);
+    print('=-=-=-=-=-=-');
+    print(hasPermission);
+    // if (hasPermission == true) {
+    //   lounchMap();
+    // }
+
+    if (!hasPermission) return;
+    await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high)
+        .then((Position position) {
+      setState(() => _currentPosition = position); 
+      lounchMap();
+    }).catchError((e) {
+      debugPrint(e);
     });
   }
 
   @override
   void initState() {
     super.initState();
-    // getCurrentLocarion();
+    //getCurrentLocarion();
     getSelectedAppotment();
   }
 
@@ -205,29 +231,29 @@ class _AppoitmentDetailScreenState extends State<AppoitmentDetailScreen> {
                 SizedBox(
                   height: 15,
                 ),
-                // selectedAppoitmentData['images']['url'] == null
-                //     ? SizedBox()
-                //     : Container(
-                //         height: 100,
-                //         width: 100,
-                //         child: FullScreenWidget(
-                //           backgroundColor: backgroundColor,
-                //           backgroundIsTransparent: true,
-                //           child: Center(
-                //             child: Hero(
-                //               tag: "nonTransparent",
-                //               child: ClipRRect(
-                //                 //borderRadius: BorderRadius.circular(16),
-                //                 child: Image.network(
-                //                   selectedAppoitmentData!.images[0]['url']
-                //                       .toString(),
-                //                   fit: BoxFit.fill,
-                //                 ),
-                //               ),
-                //             ),
-                //           ),
-                //         ),
-                //       ),
+                selectedAppoitmentData['images']?[0]['url'] == null
+                    ? SizedBox()
+                    : Container(
+                        height: 100,
+                        width: 100,
+                        child: FullScreenWidget(
+                          backgroundColor: backgroundColor,
+                          backgroundIsTransparent: true,
+                          child: Center(
+                            child: Hero(
+                              tag: "nonTransparent",
+                              child: ClipRRect(
+                                //borderRadius: BorderRadius.circular(16),
+                                child: Image.network(
+                                  selectedAppoitmentData['images'][0]['url']
+                                      .toString(),
+                                  fit: BoxFit.fill,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
                 Container(
                   height: 300,
                   width: double.infinity,
@@ -239,9 +265,10 @@ class _AppoitmentDetailScreenState extends State<AppoitmentDetailScreen> {
                     ),
                   ),
                   child: GoogleMapScreen(
-                    // latitude:
-                    //     selectedAppoitmentData['geoLocation']['lat'],
-                    // longitude: selectedAppoitmentData['geoLocation']['long'],
+                    latitude:
+                        selectedAppoitmentData['geoLocation']['lat'].toDouble(),
+                    longitude: selectedAppoitmentData['geoLocation']['long']
+                        .toDouble(),
                   ),
                 ),
                 selectedAppoitmentData['status'] == 'Completed'
@@ -257,27 +284,30 @@ class _AppoitmentDetailScreenState extends State<AppoitmentDetailScreen> {
                               child: CommonButton(
                                 buttonName: 'Get Direction',
                                 onPresse: () async {
-                                  setState(() {
-                                    mapLauncher.MapLauncher.showDirections(
-                                      mapType: mapLauncher.MapType.google,
-                                      origin: mapLauncher.Coords(
-                                        currentLattitude!,
-                                        currentLongitude!,
-                                      ),
-                                      originTitle: 'Your Locations',
-                                      directionsMode:
-                                          mapLauncher.DirectionsMode.driving,
-                                      destinationTitle: 'Destination Location',
-                                      destination: mapLauncher.Coords(
-                                        selectedAppoitmentData['geoLocation']
-                                                ['lat']
-                                            .toDouble(),
-                                        selectedAppoitmentData['geoLocation']
-                                                ['long']
-                                            .toDouble(),
-                                      ),
-                                    );
-                                  });
+                                  getCurrentLocarion();
+                                  //lounchMap();
+                                  //print(hasPermission);
+                                  // setState(() {
+                                  //   mapLauncher.MapLauncher.showDirections(
+                                  //     mapType: mapLauncher.MapType.google,
+                                  //     origin: mapLauncher.Coords(
+                                  //       _currentPosition!.latitude,
+                                  //       _currentPosition!.longitude,
+                                  //     ),
+                                  //     originTitle: 'Your Locations',
+                                  //     directionsMode:
+                                  //         mapLauncher.DirectionsMode.driving,
+                                  //     destinationTitle: 'Destination Location',
+                                  //     destination: mapLauncher.Coords(
+                                  //       selectedAppoitmentData['geoLocation']
+                                  //               ['lat']
+                                  //           .toDouble(),
+                                  //       selectedAppoitmentData['geoLocation']
+                                  //               ['long']
+                                  //           .toDouble(),
+                                  //     ),
+                                  //   );
+                                  // });
                                 },
                               ),
                             ),

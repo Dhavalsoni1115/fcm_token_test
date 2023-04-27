@@ -5,11 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class GoogleMapScreen extends StatefulWidget {
-  // final double latitude, longitude;
+   final double latitude, longitude;
   const GoogleMapScreen({
     Key? key,
-    // required this.latitude,
-    // required this.longitude,
+    required this.latitude,
+    required this.longitude,
   }) : super(key: key);
 
   @override
@@ -38,7 +38,7 @@ class _GoogleMapScreenState extends State<GoogleMapScreen> {
           markers: {
             Marker(
                 markerId: MarkerId("marker1"),
-                position: LatLng(20.3733395, 72.90789300000002),
+                position: _kGooglePlex.target,
                 draggable: true,
                 onTap: () {
                   print('hello');

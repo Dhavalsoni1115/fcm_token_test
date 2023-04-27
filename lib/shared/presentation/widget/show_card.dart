@@ -29,6 +29,8 @@ class _ShowCardState extends State<ShowCard> {
     var appoitmentData = FirebaseFirestore.instance
         .collection("appointments")
         .where('staffId', isEqualTo: widget.staffId);
+    appoitmentData = appoitmentData.where('status', isEqualTo: widget.status);
+
     return StreamBuilder(
       stream: appoitmentData.snapshots(),
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
@@ -54,12 +56,16 @@ class _ShowCardState extends State<ShowCard> {
           //   }).toList();
           // }
           // List data1;
-          // if (documents.isNotEmpty) {
-          //    data1 = documents.contains('status');
-          //   print(data1);
-          //   // var data = documents.asMap();
-          //   // data1 = data.containsValue(widget.status) as List;
-          // }
+          if (documents.isNotEmpty) {
+            //  data1 = documents.contains('status');
+            // print(data1);
+            documents = documents
+                .where((data) => data['status'] == widget.status)
+                .toList();
+            // var data = documents.asMap();
+            // data1 = data.containsValue(widget.status) as List;
+          }
+
           return documents.isNotEmpty
               ? ListView.builder(
                   itemCount: documents.length,

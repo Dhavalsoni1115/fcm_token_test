@@ -1,11 +1,10 @@
-
 import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:test_notification/shared/presentation/screens/map.dart';
 import 'package:test_notification/splash/presentation/screen/splash_screen.dart';
-
 
 import 'constants.dart';
 import 'home/presentation/screens/home_screen.dart';
@@ -71,7 +70,9 @@ class _MyAppState extends State<MyApp> {
               duration: 1000,
               splashTransition: SplashTransition.fadeTransition,
             )
-          : HomeScreen(staffId: token.toString()),
+          : HomeScreen(
+              staffId: token.toString(),
+            ),
     );
   }
 }

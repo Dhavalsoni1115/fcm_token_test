@@ -186,6 +186,13 @@ class _LoginScreenState extends State<LoginScreen> {
                           print('id');
                           print(staffId);
                           await getSelectedStaff(staffId);
+                          if (staffId == null) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text('Invalid Email and Password'),
+                              ),
+                            );
+                          }
                           String selectedId = await selectedStaffData['id'];
                           if (staffId == selectedStaffData['id']) {
                             if (selectedStaffData['active'] == true) {
@@ -217,7 +224,6 @@ class _LoginScreenState extends State<LoginScreen> {
                               );
                             }
                           }
-
                           // print(selectedStaffdata.toJson());
                         },
                         buttonName: 'Login',
