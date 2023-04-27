@@ -6,16 +6,18 @@ import '../../../constants.dart';
 class CommonButton extends StatelessWidget {
   final VoidCallback onPresse;
   final String buttonName;
+  final Color clr;
   const CommonButton({
     Key? key,
     required this.buttonName,
     required this.onPresse,
+    required this.clr,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return MaterialButton(
-      color: primaryColor,
+      color: clr,
       shape: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10), borderSide: BorderSide.none),
       onPressed: onPresse,

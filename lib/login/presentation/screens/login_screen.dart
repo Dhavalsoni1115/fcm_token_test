@@ -28,6 +28,8 @@ class _LoginScreenState extends State<LoginScreen> {
   String? email, password;
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+
+  bool loginButton = false;
   // dynamic staffData = [];
   // getStaff() async {
   //   var staff = Staff();
@@ -166,68 +168,89 @@ class _LoginScreenState extends State<LoginScreen> {
                     child: SizedBox(
                       width: 200,
                       height: 50,
-                      child: LoginButton(
-                        buttonColor: primaryColor,
-                        onPress: () async {
-                          if (_loginKey.currentState!.validate()) {
-                          } else {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text('Incorrect Email And Password.'),
-                              ),
-                            );
-                          }
-                          var loginUser = Staff();
-                          var staffId = await loginUser.signInStaff(
-                            context: context,
-                            email: email!,
-                            password: password!,
-                          );
-                          print('id');
-                          print(staffId);
-                          await getSelectedStaff(staffId);
-                          if (staffId == null) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text('Invalid Email and Password'),
-                              ),
-                            );
-                          }
-                          String selectedId = await selectedStaffData['id'];
-                          if (staffId == selectedStaffData['id']) {
-                            if (selectedStaffData['active'] == true) {
-                              // If the form is valid, display a snackbar. In the real world,
-                              // you'd often call a server or save the information in a database.
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text('Login Sucessfull'),
-                                ),
-                              );
-                              storeFcmToken(token, staffId.toString());
-                              var sharedPref = LoginSharedPrefrance();
-                              await sharedPref
-                                  .storeLoginToken(staffId.toString());
+                      child: loginButton == false
+                          ? LoginButton(
+                              buttonColor: primaryColor,
+                              onPress: () async {
+                                setState(() {
+                                  loginButton = true;
+                                });
+                                if (_loginKey.currentState!.validate()) {
+                                } else {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content:
+                                          Text('Incorrect Email And Password.'),
+                                    ),
+                                  );
+                                }
+                                var loginUser = Staff();
+                                var staffId = await loginUser.signInStaff(
+                                  context: context,
+                                  email: email!,
+                                  password: password!,
+                                );
+                                print('id');
+                                print(staffId);
+                                await getSelectedStaff(staffId);
+                                if (staffId == null) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content:
+                                          Text('Invalid Email and Password'),
+                                    ),
+                                  );
+                                }
+                                String selectedId =
+                                    await selectedStaffData['id'];
+                                if (staffId == selectedStaffData['id']) {
+                                  if (selectedStaffData['active'] == true) {
+                                    // If the form is valid, display a snackbar. In the real world,
+                                    // you'd often call a server or save the information in a database.
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                        content: Text('Login Sucessfull'),
+                                      ),
+                                    );
+                                    storeFcmToken(token, staffId.toString());
+                                    var sharedPref = LoginSharedPrefrance();
+                                    await sharedPref
+                                        .storeLoginToken(staffId.toString());
 
-                              Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => HomeScreen(
-                                    staffId: staffId.toString(),
+                                    Navigator.pushReplacement(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => HomeScreen(
+                                          staffId: staffId.toString(),
+                                        ),
+                                      ),
+                                    );
+                                  } else {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                        content: Text('Please Contact Admin'),
+                                      ),
+                                    );
+                                  }
+                                }
+                                // print(selectedStaffdata.toJson());
+                              },
+                              buttonName: 'Login',
+                            )
+                          : Column(
+                              children: [
+                                Expanded(
+                                  child: Container(
+                                    color: backgroundColor,
+                                    child: Center(
+                                      child: CircularProgressIndicator(
+                                        color: primaryColor,
+                                      ),
+                                    ),
                                   ),
                                 ),
-                              );
-                            } else {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text('Please Contact Admin'),
-                                ),
-                              );
-                            }
-                          }
-                          // print(selectedStaffdata.toJson());
-                        },
-                        buttonName: 'Login',
-                      ),
+                              ],
+                            ),
                     ),
                   ),
                 ],

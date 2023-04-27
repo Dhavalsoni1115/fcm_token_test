@@ -50,21 +50,7 @@ class _ShowCardState extends State<ShowCard> {
           //     .where((i) => i.data().containsValue(widget.status))
           //     .toList();
 
-          // if (documents.isNotEmpty) {
-          //   documents = documents.where((element) {
-          //     return element.data().toString().contains(widget.status);
-          //   }).toList();
-          // }
           // List data1;
-          if (documents.isNotEmpty) {
-            //  data1 = documents.contains('status');
-            // print(data1);
-            documents = documents
-                .where((data) => data['status'] == widget.status)
-                .toList();
-            // var data = documents.asMap();
-            // data1 = data.containsValue(widget.status) as List;
-          }
 
           return documents.isNotEmpty
               ? ListView.builder(

@@ -107,7 +107,7 @@ class _AppoitmentDetailScreenState extends State<AppoitmentDetailScreen> {
     if (!hasPermission) return;
     await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high)
         .then((Position position) {
-      setState(() => _currentPosition = position); 
+      setState(() => _currentPosition = position);
       lounchMap();
     }).catchError((e) {
       debugPrint(e);
@@ -283,31 +283,9 @@ class _AppoitmentDetailScreenState extends State<AppoitmentDetailScreen> {
                               width: 150,
                               child: CommonButton(
                                 buttonName: 'Get Direction',
+                                clr: primaryColor,
                                 onPresse: () async {
                                   getCurrentLocarion();
-                                  //lounchMap();
-                                  //print(hasPermission);
-                                  // setState(() {
-                                  //   mapLauncher.MapLauncher.showDirections(
-                                  //     mapType: mapLauncher.MapType.google,
-                                  //     origin: mapLauncher.Coords(
-                                  //       _currentPosition!.latitude,
-                                  //       _currentPosition!.longitude,
-                                  //     ),
-                                  //     originTitle: 'Your Locations',
-                                  //     directionsMode:
-                                  //         mapLauncher.DirectionsMode.driving,
-                                  //     destinationTitle: 'Destination Location',
-                                  //     destination: mapLauncher.Coords(
-                                  //       selectedAppoitmentData['geoLocation']
-                                  //               ['lat']
-                                  //           .toDouble(),
-                                  //       selectedAppoitmentData['geoLocation']
-                                  //               ['long']
-                                  //           .toDouble(),
-                                  //     ),
-                                  //   );
-                                  // });
                                 },
                               ),
                             ),
@@ -319,6 +297,7 @@ class _AppoitmentDetailScreenState extends State<AppoitmentDetailScreen> {
                               width: 150,
                               child: CommonButton(
                                 buttonName: 'Make Call',
+                                clr: primaryColor,
                                 onPresse: () async {
                                   var call = Call();
                                   await call.makeCall(
@@ -378,13 +357,22 @@ class _AppoitmentDetailScreenState extends State<AppoitmentDetailScreen> {
                             width: 100,
                             child: CommonButton(
                               buttonName: 'Update',
+                              clr: dropdownValue == 'Ongoing' &&
+                                      selectedAppoitmentData['status'] ==
+                                          'Ongoing'
+                                  ? Colors.grey
+                                  : primaryColor,
                               onPresse: () {
-                                setState(() {
-                                  changeStatus(
-                                      dropdownValue, widget.appoitmentId);
-                                  print(dropdownValue);
-                                  Navigator.pop(context);
-                                });
+                                dropdownValue == 'Ongoing' &&
+                                        selectedAppoitmentData['status'] ==
+                                            'Ongoing'
+                                    ? null
+                                    : setState(() {
+                                        changeStatus(
+                                            dropdownValue, widget.appoitmentId);
+                                        print(dropdownValue);
+                                        Navigator.pop(context);
+                                      });
                               },
                             ),
                           ),

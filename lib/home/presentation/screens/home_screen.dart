@@ -25,18 +25,12 @@ class _HomeScreenState extends State<HomeScreen> {
   int groupValue = 0;
   getFcmToken() async {
     String? fcmToken = await FirebaseMessaging.instance.getToken();
-    print('-z-z-z-z-z-z');
-    print(fcmToken.toString());
-    // print(await FirebaseMessaging.instance.getToken());
   }
- 
+
   @override
   void initState() {
     super.initState();
-    print('=-=-=-=-=-=-=-');
     getFcmToken();
-    print('=-=-=-=-=-=-=-');
-    //print(FirebaseMessaging.instance.getToken());
   }
 
   @override
@@ -60,7 +54,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   padding: const EdgeInsets.symmetric(horizontal: 10),
                   child: GestureDetector(
                     onTap: () {
-                      showDialog<String>(
+                      showDialog(
                         context: context,
                         barrierDismissible: false,
                         builder: (BuildContext context) => AlertDialog(
@@ -71,23 +65,25 @@ class _HomeScreenState extends State<HomeScreen> {
                           content:
                               const Text('Are you sure you want to Logout?'),
                           actions: <Widget>[
-                            TextButton(
+                            MaterialButton(
                               onPressed: () => Navigator.pop(context, 'Cancel'),
                               child: const Text(
                                 'Cancel',
                                 style: TextStyle(color: secondaryColor),
                               ),
                             ),
-                            TextButton(
+                            MaterialButton(
                               onPressed: () async {
                                 var loginPref = LoginSharedPrefrance();
                                 await loginPref.removeToken();
 
-                                Navigator.pushReplacement(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => const LoginScreen(),
-                                    ));
+                                Navigator.pushAndRemoveUntil(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const LoginScreen(),
+                                  ),
+                                  (Route route) => false,
+                                );
                               },
                               child: const Text(
                                 'OK',
